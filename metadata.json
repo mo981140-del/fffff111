@@ -1,0 +1,6 @@
+{
+  "name": "Local App Container",
+  "description": "حاوية التطبيقات المحلية - مشغل ومحاكي الويب المعزول ومستعرض المشاريع بدون خادم محلي",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

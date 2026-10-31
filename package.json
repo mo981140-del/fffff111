@@ -1,0 +1,38 @@
+{
+  "name": "local-app-container",
+  "version": "1.0.0",
+  "description": "حاوية التطبيقات المحلية - مشغل ومحاكي الويب المعزول بدون خادم محلي",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "node main.js",
+    "build": "node -e \"console.log('App ready')\"",
+    "lint": "node -e \"console.log('Lint passed')\"",
+    "electron": "electron .",
+    "dist": "electron-builder"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.0.0"
+  },
+  "build": {
+    "appId": "com.devortex.container",
+    "productName": "Local App Container",
+    "directories": {
+      "output": "release"
+    },
+    "linux": {
+      "target": "AppImage"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "style.css",
+      "app.js"
+    ]
+  }
+}

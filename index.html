@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      (function() {
+        try {
+          var _origFetch = window.fetch ? window.fetch.bind(window) : undefined;
+          Object.defineProperty(window, 'fetch', {
+            get: function() { return _origFetch; },
+            set: function(fn) { _origFetch = fn; },
+            configurable: true,
+            enumerable: true
+          });
+        } catch (e) {}
+
+        window.addEventListener('error', function(e) {
+          if (e.filename && e.filename.indexOf('chrome-extension://') !== -1) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            return true;
+          }
+        }, true);
+
+        window.onerror = function(msg, url, line) {
+          if (url && url.indexOf('chrome-extension://') !== -1) {
+            return true;
+          }
+        };
+
+        window.addEventListener('unhandledrejection', function(e) {
+          if (e.reason && (e.reason.stack || '').indexOf('chrome-extension://') !== -1) {
+            e.preventDefault();
+          }
+        });
+      })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>حاوية التطبيقات المحلية | Local App Container</title>
+    <meta name="description" content="حاوية ومحاكي تشغيل مشاريع الويب المحلية وتطبيقات HTML/CSS/JS المعزولة بدون خادم" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="appContainer" class="app-container">
+      <!-- SIDEBAR -->
+      <aside id="sidebar" class="sidebar">
+        <!-- Sidebar Header / Branding -->
+        <div class="sidebar-header">
+          <div class="brand-logo">
+            <span class="gold-orb"></span>
+            <div class="brand-text">
+              <h1 class="brand-title">حاوية التطبيقات</h1>
+              <span class="brand-subtitle">Local App Container</span>
+            </div>
+          </div>
+          <span class="env-badge" id="envBadge" title="بيئة التشغيل">Web Mode</span>
+        </div>
+
+        <!-- Sidebar Action Buttons -->
+        <div class="sidebar-actions">
+          <button id="btnAddApp" class="btn btn-primary" title="استيراد مجلد ويب كامل من جهازك">
+            <span class="icon">➕</span>
+            <span class="btn-text">إضافة تطبيق جديد</span>
+          </button>
+          
+          <button id="btnLoadDemo" class="btn btn-secondary" title="تجربة تطبيق تجريبي فوري مدمج">
+            <span class="icon">🚀</span>
+            <span class="btn-text">تطبيق تجريبي مدمج</span>
+          </button>
+        </div>
+
+        <!-- Search / Filter -->
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="بحث في التطبيقات المحفوظة..." aria-label="بحث في التطبيقات" />
+        </div>
+
+        <!-- Section Title -->
+        <div class="sidebar-section-title">
+          <span>التطبيقات المثبتة</span>
+          <span id="appsCountBadge" class="counter-badge">0</span>
+        </div>
+
+        <!-- Saved Apps List from IndexedDB -->
+        <div id="appList" class="app-list">
+          <!-- Populated dynamically via app.js -->
+        </div>
+
+        <!-- Sidebar Footer -->
+        <div class="sidebar-footer">
+          <div class="storage-info">
+            <span class="icon">💾</span>
+            <span id="storageLabel">مخزن محلياً في IndexedDB</span>
+          </div>
+          <div class="footer-links">
+            <span class="version-tag">v1.2.0 • CommonJS</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT AREA -->
+      <main id="mainArea" class="main-area">
+        <!-- Top Control Bar (Active when an app is running) -->
+        <header id="topBar" class="top-bar">
+          <div class="active-app-info">
+            <div id="topAppIcon" class="top-app-icon">🌐</div>
+            <div class="top-app-meta">
+              <h2 id="topAppName" class="top-app-name">لا يوجد تطبيق نشط</h2>
+              <div class="top-app-status">
+                <span class="status-dot"></span>
+                <span id="topAppStatusText">في الانتظار</span>
+                <span class="separator">•</span>
+                <span id="topAppFileStats">0 ملفات</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="top-bar-controls">
+            <button id="btnReloadApp" class="ctrl-btn" title="إعادة تشغيل التطبيق">
+              <span class="icon">🔄</span>
+              <span class="label">إعادة تحميل</span>
+            </button>
+
+            <button id="btnOpenSeparate" class="ctrl-btn" title="فتح التطبيق في نافذة مستقلة">
+              <span class="icon">↗️</span>
+              <span class="label">نافذة منفصلة</span>
+            </button>
+
+            <button id="btnAlwaysOnTop" class="ctrl-btn" title="تثبيت النافذة في أعلى الشاشة">
+              <span class="icon">📌</span>
+              <span class="label">تثبيت في الأعلى</span>
+            </button>
+
+            <button id="btnCreateShortcut" class="ctrl-btn" title="إنشاء اختصار سريع للتطبيق على سطح المكتب">
+              <span class="icon">🖥️</span>
+              <span class="label">اختصار سطح المكتب</span>
+            </button>
+
+            <button id="btnToggleConsole" class="ctrl-btn" title="إظهار سجل أخطاء ورسائل التطبيق">
+              <span class="icon">🛠️</span>
+              <span class="label">الكونسول</span>
+              <span id="consoleCountBadge" class="mini-badge">0</span>
+            </button>
+
+            <button id="btnFullscreen" class="ctrl-btn ctrl-btn-gold" title="تشغيل بكامل الشاشة">
+              <span class="icon">⛶</span>
+              <span class="label">ملء الشاشة</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- Runner Stage -->
+        <div class="runner-stage">
+          <!-- Welcome Screen (When no app is selected) -->
+          <div id="welcomeScreen" class="welcome-screen">
+            <div class="welcome-card">
+              <div class="welcome-orb">
+                <span class="orb-icon">⚡</span>
+              </div>
+              <h2 class="welcome-title">مرحباً بك في حاوية التطبيقات المحلية</h2>
+              <p class="welcome-desc">
+                شغّل أي مجلد ويب أو مشروع HTML/CSS/JS بالكامل داخل بيئة آمنة ومعزولة بدون الحاجة لخوادم محلية أو اتصال بالإنترنت.
+              </p>
+
+              <div class="features-grid">
+                <div class="feature-item">
+                  <div class="f-icon">📂</div>
+                  <h3>استيراد مجلدات كاملة</h3>
+                  <p>قراءة ملفات HTML و CSS و JS والصور والخطوط وحفظها محلياً في IndexedDB.</p>
+                </div>
+                <div class="feature-item">
+                  <div class="f-icon">🔮</div>
+                  <h3>محرك Blob الذكي</h3>
+                  <p>إعادة توجيه المسارات والروابط تلقائياً لتعمل داخل الـ iframe بلا أي انقطاع.</p>
+                </div>
+                <div class="feature-item">
+                  <div class="f-icon">🛡️</div>
+                  <h3>عزل وأمان تام</h3>
+                  <p>بيئة Sandbox مستقلة تمنع التداخل مع جهازك وتضمن أعلى أداء.</p>
+                </div>
+                <div class="feature-item">
+                  <div class="f-icon">🪟</div>
+                  <h3>نوافذ مستقلة وشورت كت</h3>
+                  <p>تشغيل في نوافذ مستقلة، تثبيت في الأعلى، وإنشاء اختصارات سطح المكتب.</p>
+                </div>
+              </div>
+
+              <div class="welcome-actions">
+                <button id="welcomeAddBtn" class="btn btn-primary btn-lg">
+                  <span>➕ استيراد مجلد مشروع جديد</span>
+                </button>
+                <button id="welcomeDemoBtn" class="btn btn-secondary btn-lg">
+                  <span>🚀 تجربة تطبيق الآلة الحاسبة والألعاب التجريبي</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- The Real Sandboxed Application IFrame -->
+          <iframe
+            id="appRunner"
+            class="app-runner-frame"
+            sandbox="allow-scripts allow-forms allow-modals allow-same-origin allow-popups"
+            allow="fullscreen"
+          ></iframe>
+
+          <!-- Floating Exit Fullscreen Button -->
+          <button id="btnExitFullscreen" class="btn-exit-fullscreen" title="الخروج من ملء الشاشة (Esc)">
+            <span>✖ خروج من ملء الشاشة</span>
+          </button>
+
+          <!-- Real-Time Console Drawer -->
+          <div id="consoleDrawer" class="console-drawer">
+            <div class="console-header">
+              <div class="console-title">
+                <span class="icon">📟</span>
+                <span>سجل الكونسول المباشر (Iframe Logs)</span>
+              </div>
+              <div class="console-actions">
+                <button id="btnClearConsole" class="btn-text-sm">مسح السجل</button>
+                <button id="btnCloseConsole" class="btn-icon-sm" title="إغلاق">✕</button>
+              </div>
+            </div>
+            <div id="consoleLogsList" class="console-logs-list">
+              <div class="console-empty">لا توجد رسائل مسجلة حتى الآن من التطبيق النشط.</div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- MODAL: Import New App Confirmation & Metadata -->
+    <div id="importModal" class="modal-overlay">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3 class="modal-title">استيراد تطبيق جديد</h3>
+          <button id="btnCloseImportModal" class="modal-close-btn">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="folder-scan-summary">
+            <div class="scan-icon">📁</div>
+            <div class="scan-details">
+              <strong id="scanFolderName">اسم المجلد</strong>
+              <span id="scanStatsText">0 ملف تم فحصه</span>
+              <span id="scanEntryStatus" class="entry-status-badge">جاري الفحص...</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="appNameInput">اسم التطبيق:</label>
+            <input type="text" id="appNameInput" class="form-input" placeholder="أدخل اسماً للتطبيق..." />
+          </div>
+
+          <div class="form-group">
+            <label>أيقونة التطبيق:</label>
+            <div class="icon-selector-row">
+              <div id="iconPreview" class="icon-preview-box">
+                <span id="iconEmoji">🌐</span>
+              </div>
+              <div class="icon-presets">
+                <button type="button" class="preset-btn active" data-icon="🌐">🌐 عام</button>
+                <button type="button" class="preset-btn" data-icon="🎮">🎮 ألعاب</button>
+                <button type="button" class="preset-btn" data-icon="📊">📊 لوحة تحكم</button>
+                <button type="button" class="preset-btn" data-icon="🧮">🧮 أدوات</button>
+                <button type="button" class="preset-btn" data-icon="🎨">🎨 تصميم</button>
+                <button type="button" class="preset-btn" data-icon="⚡">⚡ سريع</button>
+              </div>
+              <button type="button" id="btnUploadCustomIcon" class="btn btn-secondary btn-sm">
+                <span>📁 رفع صورة كأيقونة</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button id="btnCancelImport" class="btn btn-secondary">إلغاء</button>
+          <button id="btnConfirmImport" class="btn btn-primary">
+            <span>💾 حفظ وتشغيل التطبيق الآن</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: Delete Confirmation -->
+    <div id="deleteModal" class="modal-overlay">
+      <div class="modal-box modal-box-danger">
+        <div class="modal-header">
+          <h3 class="modal-title">حذف التطبيق</h3>
+          <button id="btnCloseDeleteModal" class="modal-close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>هل أنت متأكد من رغبتك في حذف تطبيق <strong id="deleteTargetName">...</strong>؟</p>
+          <p class="text-muted">سيتم مسح جميع ملفات التطبيق من قاعدة البيانات المحلية (IndexedDB) نهائياً.</p>
+        </div>
+        <div class="modal-footer">
+          <button id="btnCancelDelete" class="btn btn-secondary">تراجع</button>
+          <button id="btnConfirmDelete" class="btn btn-danger">🗑️ نعم، حذف نهائياً</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOATING TOAST NOTIFICATION -->
+    <div id="toast" class="toast">
+      <span id="toastIcon" class="toast-icon">✨</span>
+      <span id="toastMessage" class="toast-msg">إشعار</span>
+    </div>
+
+    <!-- HIDDEN INPUTS -->
+    <input type="file" id="folderInput" webkitdirectory directory multiple style="display: none;" />
+    <input type="file" id="iconFileInput" accept="image/*" style="display: none;" />
+
+    <!-- Pure Vanilla Logic -->
+    <script src="app.js"></script>
+  </body>
+</html>
