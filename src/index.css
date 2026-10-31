@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --obsidian: #0B0C10;
+    --obsidian-surface: #14171E;
+    --obsidian-card: #1A1E27;
+    --gold: #FFD700;
+    --gold-muted: #D4AF37;
+    --gold-dark: #8C7318;
+  }
+
+  body {
+    font-family: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #0B0C10;
+    color: #F3F4F6;
+    user-select: none;
+  }
+}
+
+/* Custom Scrollbars in Luxury Theme */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0B0C10;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2D333F;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 215, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FFD700;
+}
+
+/* Luxury Gold Glow & Metallic Shadows */
+.gold-glow {
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.18), inset 0 0 15px rgba(255, 215, 0, 0.05);
+}
+
+.gold-glow-hover:hover {
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.3), inset 0 0 10px rgba(255, 215, 0, 0.1);
+}
+
+.gold-border-gradient {
+  border-image: linear-gradient(to bottom, #FFD700, rgba(255, 215, 0, 0.2), #D4AF37) 1;
+}
+
+/* Fullscreen Mode for the Local App Runner */
+.fullscreen-mode {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9999 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  border: none !important;
+  background-color: #000000 !important;
+}
+
+.fullscreen-mode iframe {
+  width: 100vw !important;
+  height: 100vh !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
