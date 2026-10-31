@@ -1,4 +1,4 @@
-name: Build Electron App (Linux)
+name: Build Electron App
 
 on:
   push:
@@ -7,7 +7,10 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
 
     steps:
     - name: Checkout code
@@ -22,11 +25,11 @@ jobs:
     - name: Install dependencies
       run: npm install --legacy-peer-deps
 
-    - name: Build Electron App
-      run: npm run dist -- --linux AppImage
+    - name: Build Electron App (Windows & Linux)
+      run: npm run dist -- --publish never
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: build-linux
-        path: release/*.AppImage
+        name: build-${{ matrix.os }}
+        path: release/*
