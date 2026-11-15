@@ -1,4 +1,4 @@
-name: Build DevVortex JWT Inspector
+name: Build DevVortex Headers Inspector
 
 on:
   push:
