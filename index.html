@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>DevVortex Headers Inspector</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">D</div>
+            <div class="brand-text">
+                <h1>DevVortex</h1>
+                <span>Enterprise Security</span>
+            </div>
+        </div>
+        <nav class="nav-menu">
+            <button class="nav-item active" data-target="inspectorView">
+                <span class="icon">🛡️</span> <span data-i18n="nav_inspector">فاحص الحماية</span>
+            </button>
+            <button class="nav-item" data-target="aboutView">
+                <span class="icon">ℹ️</span> <span data-i18n="nav_about">نبذة عن الأداة</span>
+            </button>
+        </nav>
+        <div class="sidebar-bottom">
+            <button class="lang-btn" id="langToggle"><span id="langText">English</span></button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <section id="inspectorView" class="view-section active">
+            <header class="view-header">
+                <h2 data-i18n="app_title">محلل رؤوس الأمان والخصوصية</h2>
+                <p data-i18n="app_desc">أداة متقدمة لفحص إعدادات الحماية، الكوكيز، و CORS للمواقع</p>
+            </header>
+
+            <div class="card input-card">
+                <label data-i18n="input_label">أدخل رابط الموقع للبدء (مثال: https://google.com):</label>
+                <div class="input-group">
+                    <input type="text" id="urlInput" placeholder="https://..." dir="ltr" spellcheck="false">
+                    <button id="analyzeBtn" class="btn primary" data-i18n="btn_analyze">فحص الموقع</button>
+                </div>
+            </div>
+
+            <div id="resultsSection" class="results-section hidden">
+                <div class="score-container">
+                    <div class="score-circle" id="scoreCircle">
+                        <span id="scoreValue">F</span>
+                        <small data-i18n="score_grade">التقييم</small>
+                    </div>
+                    <div class="score-text">
+                        <h3 data-i18n="score_title">تقرير الفحص</h3>
+                        <p id="scoreMessage"></p>
+                    </div>
+                </div>
+                
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="headersTab" data-i18n="tab_headers">رؤوس الأمان</button>
+                    <button class="tab-btn" data-tab="cookiesTab" data-i18n="tab_cookies">الكوكيز (Cookies)</button>
+                    <button class="tab-btn" data-tab="corsTab" data-i18n="tab_cors">إعدادات CORS</button>
+                </div>
+
+                <div id="headersTab" class="tab-content active">
+                    <div class="headers-list" id="headersList"></div>
+                </div>
+                <div id="cookiesTab" class="tab-content">
+                    <div class="headers-list" id="cookiesList"></div>
+                </div>
+                <div id="corsTab" class="tab-content">
+                    <div class="headers-list" id="corsList"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="aboutView" class="view-section">
+            <header class="view-header">
+                <h2 data-i18n="about_title">نبذة عن الأداة</h2>
+            </header>
+            <div class="card">
+                <p data-i18n="about_text" class="about-text"></p>
+            </div>
+        </section>
+    </main>
+    <script src="app.js"></script>
+</body>
+</html>

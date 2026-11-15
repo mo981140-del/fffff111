@@ -1,0 +1,21 @@
+{
+  "name": "devortex-headers-inspector",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.0.0"
+  },
+  "build": {
+    "appId": "com.devortex.headers",
+    "productName": "DevVortex Headers Inspector",
+    "directories": { "output": "release" },
+    "linux": { "target": "AppImage" },
+    "win": { "target": "nsis" },
+    "mac": { "target": "dmg" }
+  }
+}
