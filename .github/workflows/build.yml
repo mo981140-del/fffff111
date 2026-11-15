@@ -1,4 +1,4 @@
-name: Build DevVortex Headers Inspector
+name: Build DevVortex Secret Scanner
 
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: 20
-        cache: 'npm'
+        # 🚨 تم إزالة سطر الـ cache عشان ميعملش مشكلة ويوقف البناء
 
     - name: Install dependencies
       run: npm install
