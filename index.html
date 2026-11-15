@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevVortex JWT Inspector</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">D</div>
+            <div class="brand-text">
+                <h1>DevVortex</h1>
+                <span>Security Tools</span>
+            </div>
+        </div>
+
+        <nav class="nav-menu">
+            <button class="nav-item active" data-target="inspectorView" id="navInspector">
+                <span class="icon">🔍</span> <span data-i18n="nav_inspector">فاحص التوكنات</span>
+            </button>
+            <button class="nav-item" data-target="aboutView" id="navAbout">
+                <span class="icon">ℹ️</span> <span data-i18n="nav_about">نبذة عن الأداة</span>
+            </button>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <button class="lang-btn" id="langToggle">
+                <span id="langText">English</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Inspector View -->
+        <section id="inspectorView" class="view-section active">
+            <header class="view-header">
+                <h2 data-i18n="app_title">محلل توكنات JWT</h2>
+                <p data-i18n="app_desc">أداة أمنية لتحليل واكتشاف الثغرات في توكنات JSON Web Tokens</p>
+            </header>
+
+            <div class="card input-card">
+                <label data-i18n="input_label">الصق توكن JWT هنا للتحليل:</label>
+                <textarea id="jwtInput" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." spellcheck="false"></textarea>
+                <div class="actions">
+                    <button id="analyzeBtn" class="btn primary" data-i18n="btn_analyze">تحليل التوكن</button>
+                    <button id="clearBtn" class="btn secondary" data-i18n="btn_clear">مسح</button>
+                </div>
+            </div>
+
+            <div id="resultsSection" class="results-section hidden">
+                <div id="alerts" class="alerts-container"></div>
+                
+                <div class="result-grid">
+                    <div class="card code-card">
+                        <div class="card-header">
+                            <h3 data-i18n="results_header">Header (الترويسة)</h3>
+                            <button class="btn-copy" data-target="headerOutput">Copy</button>
+                        </div>
+                        <pre id="headerOutput"></pre>
+                    </div>
+
+                    <div class="card code-card">
+                        <div class="card-header">
+                            <h3 data-i18n="results_payload">Payload (البيانات)</h3>
+                            <button class="btn-copy" data-target="payloadOutput">Copy</button>
+                        </div>
+                        <pre id="payloadOutput"></pre>
+                    </div>
+                </div>
+
+                <div class="card code-card">
+                    <div class="card-header">
+                        <h3 data-i18n="results_sig">Signature (التوقيع)</h3>
+                    </div>
+                    <div id="signatureOutput" class="sig-text"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About View -->
+        <section id="aboutView" class="view-section">
+            <header class="view-header">
+                <h2 data-i18n="about_title">نبذة عن الأداة</h2>
+            </header>
+            <div class="card">
+                <p data-i18n="about_text" class="about-text">
+                    تم تطوير هذه الأداة بواسطة منصة DevVortex لمساعدة المطورين ومهندسي الأمن السيبراني في تحليل توكنات JWT واكتشاف الثغرات الأمنية الشائعة مثل ضعف التشفير، عدم وجود تاريخ انتهاء، أو تسريب بيانات حساسة. الأداة تعمل بالكامل محلياً (Client-Side) لضمان خصوصية بياناتك.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
