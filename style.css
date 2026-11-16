@@ -1,0 +1,48 @@
+/* 🚨 إضافات احترافية جديدة */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-purple); }
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 6px;
+    border: 1px solid transparent;
+    transition: 0.2s;
+    margin-bottom: 5px;
+}
+.history-item:hover {
+    background: rgba(217, 70, 239, 0.05);
+    border-color: var(--border);
+}
+.delete-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    opacity: 0.5;
+    transition: 0.2s;
+    padding: 5px;
+}
+.delete-btn:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+/* تحسين شكل الـ Tabs */
+.itab {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.itab::before {
+    content: '●';
+    font-size: 10px;
+    color: var(--border);
+}
+.itab.active::before {
+    color: var(--accent-cyan);
+}
