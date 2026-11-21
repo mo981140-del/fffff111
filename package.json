@@ -1,0 +1,34 @@
+{
+  "name": "aegis-core",
+  "version": "1.0.0",
+  "description": "Auto-Immune Binary Shield & Command Center by DevVortex",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "author": "DevVortex",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.0.0"
+  },
+  "build": {
+    "appId": "com.devortex.aegiscore",
+    "productName": "Aegis-Core Shield",
+    "directories": {
+      "output": "release"
+    },
+    "icon": "assets/icon.png",
+    "linux": {
+      "target": ["AppImage"],
+      "category": "Security"
+    },
+    "win": {
+      "target": ["nsis"]
+    },
+    "mac": {
+      "target": ["dmg"]
+    }
+  }
+}
