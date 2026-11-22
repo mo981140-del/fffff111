@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aegis-Core | DevVortex Command Center</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- القائمة الجانبية -->
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">🛡️</div>
+            <div class="brand-text">
+                <h1>Aegis-Core</h1>
+                <span>DevVortex Engine</span>
+            </div>
+        </div>
+
+        <nav class="nav-menu">
+            <button class="nav-item active">
+                <span class="icon">📊</span> 
+                <span data-i18n="nav_dashboard">لوحة القيادة</span>
+            </button>
+            <button class="nav-item" onclick="document.getElementById('aboutModal').showModal()">
+                <span class="icon">ℹ️</span> 
+                <span data-i18n="nav_about">نبذة عن البرنامج</span>
+            </button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="lang-btn" id="langToggle">
+                <span id="langText">English</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- المنطقة الرئيسية -->
+    <main class="main-content">
+        <!-- الشريط العلوي -->
+        <header class="top-bar">
+            <div class="status-indicator">
+                <span id="systemStatus" class="status-dot offline"></span>
+                <span id="systemStatusText" data-i18n="sys_offline">النظام: غير نشط</span>
+            </div>
+            <button id="toggleShieldBtn" class="btn-primary" data-i18n="btn_start_shield">
+                تفعيل الدرع الواقي (Start Shield)
+            </button>
+        </header>
+
+        <!-- لوحة الإحصائيات -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-title" data-i18n="stat_blocked">الهجمات التي تم صدها</div>
+                <div class="stat-value" id="blockedCount">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title" data-i18n="stat_integrity">سلامة النظام</div>
+                <div class="stat-value text-cyan">100%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title" data-i18n="stat_threat">مستوى التهديد الحالي</div>
+                <div class="stat-value text-danger" id="threatLevel" data-i18n="threat_low">منخفض</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title" data-i18n="stat_uptime">وقت التشغيل</div>
+                <div class="stat-value text-purple" id="uptime">00:00:00</div>
+            </div>
+        </section>
+
+        <!-- منطقة الرادار والطرفية -->
+        <section class="dashboard-body">
+            <!-- رادار الحماية -->
+            <div class="radar-container">
+                <div class="radar">
+                    <div class="radar-sweep"></div>
+                    <div class="radar-grid"></div>
+                    <div class="radar-circle c1"></div>
+                    <div class="radar-circle c2"></div>
+                    <div class="radar-circle c3"></div>
+                </div>
+                <div class="radar-status" data-i18n="radar_standby">في وضع الاستعداد...</div>
+            </div>
+
+            <!-- شاشة السجلات (Terminal) -->
+            <div class="terminal-container">
+                <div class="terminal-header">
+                    <span class="dot red"></span>
+                    <span class="dot yellow"></span>
+                    <span class="dot green"></span>
+                    <span class="terminal-title" data-i18n="term_title">سجل العمليات الحية</span>
+                </div>
+                <div class="terminal-body" id="terminalLogs">
+                    <div class="log-line text-cyan">[SYSTEM] Aegis-Core initialized.</div>
+                    <div class="log-line text-muted">[SYSTEM] Waiting for user command...</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- نافذة النبذة -->
+    <dialog id="aboutModal" class="modal">
+        <h2 data-i18n="about_title">نبذة عن البرنامج</h2>
+        <p data-i18n="about_text">
+            تم تطوير هذا البرنامج بواسطة منصة DevVortex. Aegis-Core هو درع مناعي ذاتي للبرمجيات، يعمل على اعتراض وتحييد الهجمات في الذاكرة (RAM) قبل أن تسبب أي ضرر للأنظمة القديمة. هذا النموذج هو Proof of Concept (نموذج أولي) يحاكي اعتراض الثغرات الخطيرة في الوقت الفعلي.
+        </p>
+        <button onclick="document.getElementById('aboutModal').close()" class="btn-secondary" data-i18n="btn_close">إغلاق</button>
+    </dialog>
+
+    <script src="app.js"></script>
+</body>
+</html>
